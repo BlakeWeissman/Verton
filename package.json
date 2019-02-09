@@ -1,6 +1,6 @@
 {
   "name": "verton",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "\u001b[2;3~A customizable digital assistant.",
   "main": "main.js",
   "scripts": {
