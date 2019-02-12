@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron')
 const { globalShortcut } = require('electron')
+const storeClass = require('./storedata.js')
 
 //SET FALSE FOR PUBLIC BUILDS
 let devMode = true
@@ -7,9 +8,24 @@ let devMode = true
 let win
 let menubarToBeEnabled = true
 
+//Create user data file to store data
+const store = new storeClass({
+  configName: 'Verton',
+  defaults: {
+    windowDimensions: { width: 520, height: 345 }
+  }
+});
+
 function createWindow () {
   //Create the browser window
-  win = new BrowserWindow({ width: 545, height: 360 })
+  let { width, height } = store.get('windowDimensions')
+  win = new BrowserWindow({ width, height })
+  
+  //Store window dimension data
+  win.on('resize', () => {
+    let { width, height } = win.getBounds();
+    store.set('windowDimensions', { width, height });
+  });
 
   //Load the index.html of the app
   win.loadFile('index.html')
