@@ -81,6 +81,10 @@ div.packagebar-icon-art {
 
 /*display*/
 div.display {
+    transition: var(--animation-standard);
+}
+
+div.display-wrap {
     width: 100%;
     height: 100%;
     padding: 7px 7px 7px 50px;
