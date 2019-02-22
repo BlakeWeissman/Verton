@@ -2,31 +2,9 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Verton 1.0 Dev</title>
+    <title>Verton 1.0.0 Dev Build</title>
     <link rel="stylesheet" href="style.css">
   </head>
-  <script>
-    const { ipcRenderer } = require('electron');
-
-    let css = document.documentElement;
-
-    //Changes theme to light or dark
-    function themeChange(themeName) {
-      if (themeName === "dark") {
-        css.style.setProperty('--theme-packagebar-background', "linear-gradient(#4e4b49, #3d3d3d)");
-        css.style.setProperty('--theme-background', "#2d2d2d");
-      }
-      if (themeName === "light") {
-        css.style.setProperty('--theme-packagebar-background', "linear-gradient(#e5e5e5, #cfcfcf)");
-        css.style.setProperty('--theme-background', "#fff");
-      }
-    }
-
-    //Receive request from main to change theme
-    ipcRenderer.on('send-theme', (event, message) => {
-      themeChange(message);
-    });
-  </script>
   <body>
     <div class="packagebar">
       <div class="packagebar-wrap">
@@ -53,8 +31,31 @@
         </div>     
       </div>
     </div>
-    <div class="display">
-      <p style="margin:0; font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 13px; background: linear-gradient(-180deg, #1c8dff 0%, #2463ff 100%) fixed; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">The quick brown fox jumped over the lazy dogs.</p>
-    </div>
+    <div class="display" id="display"></div>
   </body>
+  <script>
+      const { ipcRenderer } = require('electron');
+      window.$ = window.jQuery = require('./jquery-3.3.1.min.js');
+  
+      let css = document.documentElement;
+  
+      //Changes theme to light or dark
+      function themeChange(themeName) {
+        if (themeName === "dark") {
+          css.style.setProperty('--theme-packagebar-background', "linear-gradient(#4e4b49, #3d3d3d)");
+          css.style.setProperty('--theme-background', "#2d2d2d");
+        }
+        if (themeName === "light") {
+          css.style.setProperty('--theme-packagebar-background', "linear-gradient(#e5e5e5, #cfcfcf)");
+          css.style.setProperty('--theme-background', "#fff");
+        }
+      }
+  
+      //Receive request from main to change theme
+      ipcRenderer.on('send-theme', (event, message) => {
+        themeChange(message);
+      });
+
+      $("#display").load("assistant.html");
+    </script>
 </html>
