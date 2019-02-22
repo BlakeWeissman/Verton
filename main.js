@@ -21,7 +21,7 @@ const store = new storeClass({
 function createWindow () {
   //Create the browser window
   let { width, height } = store.get('windowDimensions');
-  win = new BrowserWindow({ width, height });
+  win = new BrowserWindow({ width, height, icon: "./icon.png" });
   
   //Store window dimension data
   win.on('resize', () => {
