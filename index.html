@@ -8,27 +8,38 @@
   <body>
     <div class="packagebar">
       <div class="packagebar-wrap">
-        <div class="packagebar-icon-outline">
-          <div class="packagebar-icon"> 
-            <div class="packagebar-icon-art-wrap">          
-              <div class="packagebar-icon-art" style="-webkit-mask-box-image: url(http://www.clker.com/cliparts/F/5/I/M/f/U/running-icon-white-on-transparent-background-md.png);"></div>
+        <div>
+          <div class="packagebar-icon-outline" id="1" onclick="loadPackage(this.id)">
+            <div class="packagebar-icon"> 
+              <div class="packagebar-icon-art-wrap">          
+                <div class="packagebar-icon-art" style="-webkit-mask-box-image: url(http://www.clker.com/cliparts/F/5/I/M/f/U/running-icon-white-on-transparent-background-md.png);"></div>
+              </div>
+            </div>
+          </div>   
+          <div class="packagebar-icon-outline" id="2" onclick="loadPackage(this.id)">
+            <div class="packagebar-icon"> 
+              <div class="packagebar-icon-art-wrap">          
+                <div class="packagebar-icon-art" style="-webkit-mask-box-image: url(http://www.clker.com/cliparts/F/5/I/M/f/U/running-icon-white-on-transparent-background-md.png);"></div>
+              </div>
+            </div>
+          </div>   
+          <div class="packagebar-icon-outline" id="3" onclick="loadPackage(this.id)">
+            <div class="packagebar-icon"> 
+              <div class="packagebar-icon-art-wrap">          
+                <div class="packagebar-icon-art" style="-webkit-mask-box-image: url(http://www.clker.com/cliparts/F/5/I/M/f/U/running-icon-white-on-transparent-background-md.png);"></div>
+              </div>
             </div>
           </div>
-        </div>   
-        <div class="packagebar-icon-outline">
-          <div class="packagebar-icon"> 
-            <div class="packagebar-icon-art-wrap">          
-              <div class="packagebar-icon-art" style="-webkit-mask-box-image: url(http://www.clker.com/cliparts/F/5/I/M/f/U/running-icon-white-on-transparent-background-md.png);"></div>
+        </div>
+        <div>
+          <div class="packagebar-icon-outline packagebar-settings" id="settings" onclick="loadPackage(this.id)">
+            <div class="packagebar-icon"> 
+              <div class="packagebar-icon-art-wrap">          
+                <div class="packagebar-icon-art" style="-webkit-mask-box-image: url(https://freeiconshop.com/wp-content/uploads/edd/settings-var-solid.png);"></div>
+              </div>
             </div>
-          </div>
-        </div>   
-        <div class="packagebar-icon-outline packagebar-settings">
-          <div class="packagebar-icon"> 
-            <div class="packagebar-icon-art-wrap">          
-              <div class="packagebar-icon-art" style="-webkit-mask-box-image: url(http://www.clker.com/cliparts/F/5/I/M/f/U/running-icon-white-on-transparent-background-md.png);"></div>
-            </div>
-          </div>
-        </div>     
+          </div>  
+        </div> 
       </div>
     </div>
     <div class="display-wrap">
@@ -37,11 +48,26 @@
   </body>
   <script>
       const { ipcRenderer } = require('electron');
+      const storeClass = require('./storedata.js');
+      const electron = require('electron');
+      const path = require('path');
+      const fs = require('fs');
       window.$ = window.jQuery = require('./jquery-3.3.1.min.js');
   
       let css = document.documentElement;
+      let packageActive = 1;
+
+      //Class that can create user data file to store data
+      const store = new storeClass({
+        configName: 'Verton',
+        defaults: {
+          windowDimensions: { width: 520, height: 345 },
+          packages: 3,
+          theme: "light", 
+        }
+      });
   
-      //Changes theme to light or dark
+      //Function that changes theme to light or dark
       function themeChange(themeName) {
         if (themeName === "dark") {
           css.style.setProperty('--theme-packagebar-background', "linear-gradient(#4e4b49, #3d3d3d)");
@@ -52,12 +78,36 @@
           css.style.setProperty('--theme-background', "#fff");
         }
       }
-  
-      //Receive request from main to change theme
+      
+      //Retrieve and set theme based on user data
+      let theme = store.get('theme');
+      if (theme === "light") {
+        themeChange("light");
+      }
+      else if (theme === "dark") {
+        themeChange("dark");
+      }
+
+      //Receive requests from the main process to change the theme
       ipcRenderer.on('send-theme', (event, message) => {
         themeChange(message);
       });
+      
+      //Load main package into display on startup and set appropriate package icon to active
+      $("#display").load(packageActive + ".html");
+      document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className += " packagebar-icon-active";
+      document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className += " packagebar-icon-art-active";
 
-      $("#display").load("assistant.html");
+      //Function that loads a package associated with its id
+      function loadPackage(id) {
+        if (packageActive != id) {
+          document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className = "packagebar-icon";
+          document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className = "packagebar-icon-art";
+          packageActive = id;
+          $("#display").load(packageActive + ".html");
+          document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className += " packagebar-icon-active";
+          document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className += " packagebar-icon-art-active";
+        }
+      }
     </script>
 </html>

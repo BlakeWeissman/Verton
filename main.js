@@ -2,39 +2,69 @@ const { app, BrowserWindow } = require('electron');
 const { globalShortcut } = require('electron');
 const { ipcMain } = require('electron');
 const storeClass = require('./storedata.js');
+const electron = require('electron');
+const path = require('path');
+const fs = require('fs');
 
 let win;
 let menubarToBeEnabled = true;
-let theme = "light";
+let theme;
+const userDataPath = (electron.app || electron.remote.app).getPath('userData') + "\\Verton.json";
 
 //SET FALSE FOR PUBLIC BUILDS
 let devMode = true;
 
-//Create user data file to store data
+//Class that can create user data file to store data
 const store = new storeClass({
   configName: 'Verton',
   defaults: {
-    windowDimensions: { width: 520, height: 345 }
+    windowDimensions: { width: 520, height: 345 },
+    packages: 3,
+    theme: "light", 
   }
 });
 
 function createWindow () {
+  //If enabled, let user know DevMode is enabled
+  if (devMode === true) {
+    console.log("Notice: DevMode is enabled. \nKeyboard Shortcuts: \nCTRL/CMD+D: Open DevTools \nCTRL/CMD+T: Change Theme");
+  }
+
+  //Create user data file if it does not exist
+  fs.stat(userDataPath, function(output) {
+    if(output == null) {
+      if (devMode === true) {
+        console.log("Notice: User data file found.");
+      }
+    } 
+    else if(output.code == 'ENOENT') {
+      store.set();
+      if (devMode === true) {
+        console.log("Notice: User data file not found, a new one has been created.");
+      }
+    } 
+  });
+
   //Create the browser window
   let { width, height } = store.get('windowDimensions');
   win = new BrowserWindow({ width, height, icon: "./icon.png" });
-  
+
+  //Load the index.html of the app
+  win.loadFile('index.html');
+
+  //Disable MenuBar
+  win.setMenu(null);
+
   //Store window dimension data
   win.on('resize', () => {
     let { width, height } = win.getBounds();
     store.set('windowDimensions', { width, height });
   });
 
-  //Load the index.html of the app
-  win.loadFile('index.html');
-
-  //If enabled, let user know DevMode is enabled
+  //Get theme info
+  theme = store.get('theme');
   if (devMode === true) {
-    console.log("Notice: DevMode is enabled. \nKeyboard Shortcuts: \nCTRL/CMD+D: Open DevTools \nCTRL/CMD+T: Change Theme");
+    console.log("Notice: The theme is '" + theme + "'.");
   }
 
   //(DEV MODE) Open DevTools Using CTRL/CMD+D
@@ -50,18 +80,17 @@ function createWindow () {
     if (devMode === true) {
       if (theme === "light") {
         win.webContents.send('send-theme', "dark");
+        store.set("theme", "dark");
         theme = "dark";
       }
       else if (theme === "dark") {
         win.webContents.send('send-theme', "light");
+        store.set("theme", "light");
         theme = "light";
       }
       console.log("Notice: The theme is now '" + theme + "'.");
     }
   })
-
-  //Disable MenuBar by default
-  win.setMenu(null);
 
   //Change MenuBar status using CTRL/CMD+M  
   /*globalShortcut.register('CommandOrControl+M', () => {
