@@ -1,3 +1,4 @@
+<!--Created by Blake Weissman-->
 <!DOCTYPE html>
 <html>
   <head>
@@ -8,7 +9,7 @@
   <body>
     <div class="packagebar">
       <div class="packagebar-wrap">
-        <div>
+        <div class="packagebar-section-main" id="packagebar-section-main">
           <div class="packagebar-icon-outline" id="1" onclick="loadPackage(this.id)">
             <div class="packagebar-icon"> 
               <div class="packagebar-icon-art-wrap">          
@@ -31,7 +32,7 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="packagebar-section-settings">
           <div class="packagebar-icon-outline packagebar-settings" id="settings" onclick="loadPackage(this.id)">
             <div class="packagebar-icon"> 
               <div class="packagebar-icon-art-wrap">          
@@ -43,71 +44,139 @@
       </div>
     </div>
     <div class="display-wrap">
-      <div class="display" id="display"></div>
+      <div class="display-title" style="cursor: pointer;" onclick="themeChange('dark')">
+        <h1 class="package-title"></h1>
+      </div>
+      <div class="display-end display-end-top"></div>
+      <div class="display" id="display" onscroll="createFade();"></div>   
+      <div class="display-end display-end-bottom hide"></div>
     </div>
   </body>
   <script>
-      const { ipcRenderer } = require('electron');
-      const storeClass = require('./storedata.js');
-      const electron = require('electron');
-      const path = require('path');
-      const fs = require('fs');
-      window.$ = window.jQuery = require('./jquery-3.3.1.min.js');
+    const { ipcRenderer } = require('electron');
+    const storeClass = require('./storedata.js');
+    const electron = require('electron');
+    const path = require('path');
+    const fs = require('fs');
+    window.$ = window.jQuery = require('./jquery-3.3.1.min.js');
+    
+    let css = document.documentElement;
+    let packageActive = 1;
+    let packageIconsGet = fs.readdirSync('packages').filter( elm => elm.match(new RegExp(`.*\.(${"verton"})`, 'ig')));
+    let packageIconsAdd = packageIconsGet.length;
+    let packageAmount = 3 + packageIconsAdd;
+    const display = document.getElementById('display');
+
+    //Class that can create user data file to store data
+    const store = new storeClass({
+      configName: 'Verton',
+      defaults: {
+        windowDimensions: { width: 520, height: 345 },
+        packages: 3,
+        theme: "light", 
+      }
+    });
   
-      let css = document.documentElement;
-      let packageActive = 1;
-
-      //Class that can create user data file to store data
-      const store = new storeClass({
-        configName: 'Verton',
-        defaults: {
-          windowDimensions: { width: 520, height: 345 },
-          packages: 3,
-          theme: "light", 
-        }
-      });
-  
-      //Function that changes theme to light or dark
-      function themeChange(themeName) {
-        if (themeName === "dark") {
-          css.style.setProperty('--theme-packagebar-background', "linear-gradient(#4e4b49, #3d3d3d)");
-          css.style.setProperty('--theme-background', "#2d2d2d");
-        }
-        if (themeName === "light") {
-          css.style.setProperty('--theme-packagebar-background', "linear-gradient(#e5e5e5, #cfcfcf)");
-          css.style.setProperty('--theme-background', "#fff");
-        }
+    //Function that changes theme to light or dark
+    function themeChange(themeName) {
+      if (themeName === "dark") {
+        css.style.setProperty('--theme-packagebar-background', "linear-gradient(#4e4b49, #3d3d3d)");
+        css.style.setProperty('--theme-background', "#2d2d2d");
+        css.style.setProperty('--theme-primary-color', "#2d2d2d");
+        css.style.setProperty('--theme-secondary-color', "#fff");   
+        store.set("theme", "dark");
       }
+      if (themeName === "light") {
+        css.style.setProperty('--theme-packagebar-background', "linear-gradient(#e5e5e5, #cfcfcf)");
+        css.style.setProperty('--theme-background', "#fff");
+        css.style.setProperty('--theme-primary-color', "#fff");
+        css.style.setProperty('--theme-secondary-color', "#2d2d2d");   
+        store.set("theme", "light");
+      }
+    }
       
-      //Retrieve and set theme based on user data
-      let theme = store.get('theme');
-      if (theme === "light") {
-        themeChange("light");
-      }
-      else if (theme === "dark") {
-        themeChange("dark");
-      }
+    //Retrieve and set theme based on user data
+    let theme = store.get('theme');
+    if (theme === "light") {
+      themeChange("light");
+    }
+    else if (theme === "dark") {
+      themeChange("dark");
+    }
 
-      //Receive requests from the main process to change the theme
-      ipcRenderer.on('send-theme', (event, message) => {
-        themeChange(message);
-      });
+    //Receive requests from the main process to change the theme
+    ipcRenderer.on('send-theme', (event, message) => {
+      themeChange(message);
+    });
       
-      //Load main package into display on startup and set appropriate package icon to active
-      $("#display").load(packageActive + ".html");
-      document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className += " packagebar-icon-active";
-      document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className += " packagebar-icon-art-active";
+    //Load main package into display on startup and set appropriate package icon to active
+    $("#display").load(packageActive + ".html");
+    document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className += " packagebar-icon-active";
+    document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className += " packagebar-icon-art-active";
+    setTitle(packageActive);
 
-      //Function that loads a package associated with its id
-      function loadPackage(id) {
-        if (packageActive != id) {
-          document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className = "packagebar-icon";
-          document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className = "packagebar-icon-art";
-          packageActive = id;
-          $("#display").load(packageActive + ".html");
-          document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className += " packagebar-icon-active";
-          document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className += " packagebar-icon-art-active";
-        }
+    //Function that loads a package associated with its id
+    function loadPackage(id) {
+      if (packageActive != id) {
+        document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className = "packagebar-icon";
+        document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className = "packagebar-icon-art";
+        packageActive = id;
+        $("#display").load(packageActive + ".html");
+        document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className += " packagebar-icon-active";
+        document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className += " packagebar-icon-art-active";
+        setTitle(packageActive);
       }
+    }
+
+    //Function that creates icons in the packagebar
+    function createIcon(iconId) {
+      let newElement = document.createElement("div");
+      newElement.setAttribute("class", "packagebar-icon-outline");
+      newElement.setAttribute("id", iconId);
+      newElement.setAttribute("onclick", "loadPackage(this.id)");
+      newElement.innerHTML = '<div class=\"packagebar-icon\"> \n              <div class=\"packagebar-icon-art-wrap\">          \n                <div class=\"packagebar-icon-art\" style=\"-webkit-mask-box-image: url(http:\/\/www.clker.com\/cliparts\/F\/5\/I\/M\/f\/U\/running-icon-white-on-transparent-background-md.png);\"><\/div>\n              <\/div>\n            <\/div>';
+      document.getElementById("packagebar-section-main").appendChild(newElement);
+    }
+
+    //Create icons for relevant packages
+    for (i = 0; i < packageIconsAdd; i++) {
+      createIcon(i + 4);
+    }
+
+    //Function that changes the display title
+    function setTitle(packageId) {
+      if (packageId == 1) {
+        $("h1.package-title").html("Assistant");
+      }
+      if (packageId == 2) {
+        $("h1.package-title").html('Creator');
+      }
+      if (packageId == 3) {
+        $("h1.package-title").html('Packages');
+      }
+      if (packageId == "settings") {
+        $("h1.package-title").html('Settings');
+      }
+    }
+    
+    //Function that displays appropriate fade effects on the top and bottom of the display (0 = bottom, 1 = neutral, 2 = top)
+    function createFade() {
+      if (display.scrollTop === (display.scrollHeight - display.offsetHeight)){    
+        $(".display-end-bottom").addClass("hide");
+      }
+      else if (display.scrollTop === 0) {
+        $(".display-end-top").addClass("hide");
+      }
+      else {
+        $(".display-end-top").removeClass("hide");
+        $(".display-end-bottom").removeClass("hide");
+      }
+    }
+
+    //Scroll display to the bottom and display appropriate fade effects outside the display on startup
+    window.onload = function () {
+      display.scrollTop = display.scrollHeight;
+      createFade();
+    }
     </script>
 </html>

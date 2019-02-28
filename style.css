@@ -4,6 +4,10 @@
     --animation-standard: all 0.2s ease;
     --theme-packagebar-background: linear-gradient(#e5e5e5, #cfcfcf);
     --theme-background: #fff;
+    --theme-gradient: linear-gradient(-180deg, #1c8dff 0%, #2463ff 100%) fixed;
+    --theme-primary-color: #fff;
+    --theme-secondary-color: #2d2d2d;
+    --theme-interactive-color: #252525;
 }
 
 body {
@@ -15,6 +19,27 @@ body {
 
 * {
     -webkit-user-select: none;
+    font-family: montserrat;
+    transition: var(--animation-standard);
+}
+
+p {
+    font-size: 11.5px;
+    font-weight: 300;
+}
+
+.hide {
+    display: none;
+}
+
+/*scrollbar*/
+::-webkit-scrollbar {
+    width: 6px;
+}
+  
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: var(--theme-secondary-color);
 }
 
 /*packagebar*/
@@ -39,7 +64,7 @@ div.packagebar-icon-outline {
     padding: 1px;
     border-radius: 10px;
     margin-top: 5px;
-    background: linear-gradient(-180deg, #1c8dff 0%, #2463ff 100%) fixed;
+    background: var(--theme-gradient);
     background-size: auto 100vh;
     box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.25);
     transition: var(--animation-interactive);
@@ -47,7 +72,7 @@ div.packagebar-icon-outline {
 }
 
 div.packagebar-icon {
-    background: #2d2d2d;
+    background: var(--theme-interactive-color);
     height: 25px;
     width: 25px;
     border-radius: 8px;
@@ -57,21 +82,21 @@ div.packagebar-icon {
 }
 
 div.packagebar-icon-outline:hover div.packagebar-icon {
-    background: linear-gradient(-180deg, #1c8dff 0%, #2463ff 100%) fixed;
+    background: var(--theme-gradient);
     background-size: auto 100vh;
 }
 
 div.packagebar-icon-outline:hover div.packagebar-icon-art {
-    background: #2d2d2d;
+    background: var(--theme-interactive-color);
 }
 
 div.packagebar-icon-active {
-    background: linear-gradient(-180deg, #1c8dff 0%, #2463ff 100%) fixed !important;
+    background: var(--theme-gradient) !important;
     background-size: auto 100vh !important;
 }
 
 div.packagebar-icon-art-active {
-    background: #2d2d2d !important;
+    background: var(--theme-interactive-color) !important;
 }
 
 div.packagebar-icon-art-wrap {
@@ -83,20 +108,87 @@ div.packagebar-icon-art-wrap {
 div.packagebar-icon-art {
     width: 15px;
     height: 15px;
-    background: linear-gradient(-180deg, #1c8dff 0%, #2463ff 100%) fixed;
+    background: var(--theme-gradient);
     background-size: auto 100vh;
     transition: var(--animation-interactive);
 }
 
 /*display*/
 div.display {
-    transition: var(--animation-standard);
+    transition: var(--animation-standard);    
+    overflow-y: scroll;
+    max-height: calc(100vh - 100px);
 }
 
 div.display-wrap {
     width: 100%;
     height: 100%;
-    padding: 7px 7px 7px 50px;
+    padding: 7px 0px 7px 50px;
     min-width: fit-content;
+    transition: var(--animation-standard);
+}
+
+div.display-title {
+    height: fit-content;
+    margin-bottom: 7px;
+}
+
+div.display-end {
+    height: 20px;
+    position: fixed;
+    width: 100%;
+}
+
+div.display-end-top {
+    background: linear-gradient(var(--theme-primary-color), transparent);
+}
+
+div.display-end-bottom {
+    background: linear-gradient(transparent, var(--theme-primary-color));
+    bottom: 47px;
+}
+
+
+/*package*/
+h1.package-title {
+    /*background: var(--theme-gradient); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;*/
+    margin: 0;
+    font-family: montserrat;
+    font-weight: 300;
+    color: var(--theme-secondary-color);
+    transition: var(--animation-standard);
+}
+
+div.package {
+    padding-right: 7px;
+}
+
+/*one*/
+p.one-chat-bubble {
+    width: fit-content;
+    margin: 0;
+    padding: 5px 5px 5px 5px;
+    color: var(--theme-primary-color);
+    transition: var(--animation-standard);
+}
+
+div.one-chat-bubble {
+    border-radius: 10px;
+    width: fit-content;
+    margin-bottom: 5px;
+    transition: var(--animation-standard);
+}
+
+div.one-chat-bubble-user {
+    background: var(--theme-gradient);
+    margin-left: auto;
+    transition: var(--animation-standard);
+}
+
+div.one-chat-bubble-verton {
+    background: var(--theme-secondary-color);
+    margin-right: auto;
     transition: var(--animation-standard);
 }
