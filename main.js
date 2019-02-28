@@ -1,3 +1,4 @@
+/*Created by Blake Weissman*/
 const { app, BrowserWindow } = require('electron');
 const { globalShortcut } = require('electron');
 const { ipcMain } = require('electron');
@@ -27,7 +28,7 @@ const store = new storeClass({
 function createWindow () {
   //If enabled, let user know DevMode is enabled
   if (devMode === true) {
-    console.log("Notice: DevMode is enabled. \nKeyboard Shortcuts: \nCTRL/CMD+D: Open DevTools \nCTRL/CMD+T: Change Theme");
+    console.log("Notice: DevMode is enabled. \n\nDevMode Keyboard Shortcuts: \nCTRL/CMD+D: Open DevTools \nCTRL/CMD+T: Change Theme\n");
   }
 
   //Create user data file if it does not exist
@@ -80,12 +81,10 @@ function createWindow () {
     if (devMode === true) {
       if (theme === "light") {
         win.webContents.send('send-theme', "dark");
-        store.set("theme", "dark");
         theme = "dark";
       }
       else if (theme === "dark") {
         win.webContents.send('send-theme', "light");
-        store.set("theme", "light");
         theme = "light";
       }
       console.log("Notice: The theme is now '" + theme + "'.");
