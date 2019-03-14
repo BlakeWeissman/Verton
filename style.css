@@ -152,6 +152,15 @@ div.packagebar-icon-art {
     transition: var(--animation-interactive);
 }
 
+div.packagebar-section-settings {
+    position: absolute;
+    bottom: 7px;
+}
+
+div.packagebar-settings {
+    width: 100%;
+}
+
 /*display*/
 div.display {
     transition: var(--animation-standard);    
