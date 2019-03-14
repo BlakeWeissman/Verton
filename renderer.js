@@ -69,11 +69,13 @@ function loadPackage(id) {
     if (packageActive != id) {
         document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className = "packagebar-icon";
         document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className = "packagebar-icon-art";
-        packageActive = id;
-        $("#display").load(packageActive + ".html");
+        packageActive = id; 
+        document.getElementById("display").style.opacity = 0;
+        setTimeout(setDisplay, 200);
         document.getElementById(packageActive).getElementsByClassName("packagebar-icon")[0].className += " packagebar-icon-active";
-        document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className += " packagebar-icon-art-active";
-        setTitle(packageActive);
+        document.getElementById(packageActive).getElementsByClassName("packagebar-icon-art")[0].className += " packagebar-icon-art-active";   
+        document.getElementById("display-title-text").style.opacity = 0;
+        setTimeout(setTitle, 200);
         if (packageActive == 1) {
             activateVerton();
         }
@@ -82,6 +84,12 @@ function loadPackage(id) {
             document.getElementById("display-verton-input").value= "";
         }
     }
+}
+
+//Function that changes the Display to the selected package
+function setDisplay() {
+    $("#display").load(packageActive + ".html");
+    document.getElementById("display").style.opacity = 1;
 }
 
 //Function that creates icons in the packagebar
@@ -100,19 +108,20 @@ for (i = 0; i < packageIconsAdd; i++) {
 }
 
 //Function that changes the display title
-function setTitle(packageId) {
-    if (packageId == 1) {
-    $("h1.display-title").html("Assistant");
+function setTitle() { 
+    if (packageActive == 1) {
+        $("h1.display-title").html("Assistant");
     }
-    if (packageId == 2) {
-    $("h1.display-title").html('Creator');
+    if (packageActive == 2) {
+        $("h1.display-title").html('Creator');
     }
-    if (packageId == 3) {
-    $("h1.display-title").html('Packages');
+    if (packageActive == 3) {
+        $("h1.display-title").html('Packages');
     }
-    if (packageId == "settings") {
-    $("h1.display-title").html('Settings');
-    }
+    if (packageActive == "settings") {
+        $("h1.display-title").html('Settings');
+    } 
+    document.getElementById("display-title-text").style.opacity = 1;
 }
 
 //Scroll display to the bottom and display appropriate fade effects outside the display on startup
@@ -168,15 +177,17 @@ document.addEventListener('animationend', function (element) {
 function createVertonOutput(){
     let newOutput = document.createElement("div");
     if (vertonOutput != null) {
-        newOutput.setAttribute("class", "one-chat-bubble one-chat-bubble-verton");
+        newOutput.setAttribute("class", "one-chat-bubble one-chat-bubble-verton hide");
         newOutput.innerHTML = "<p class='one-chat-bubble'>" + vertonOutput + "</p>";
         document.getElementById("one-chat").appendChild(newOutput);
+        show(newOutput);
     }
     else if (vertonOutput == null) {
         vertonOutput = "I'm sorry, I did not recognize your command."
-        newOutput.setAttribute("class", "one-chat-bubble one-chat-bubble-verton");
+        newOutput.setAttribute("class", "one-chat-bubble one-chat-bubble-verton hide");
         newOutput.innerHTML = "<p class='one-chat-bubble'>" + vertonOutput + "</p>";
         document.getElementById("one-chat").appendChild(newOutput);
+        show(newOutput);
         vertonOutput = null;
     }
 }
@@ -186,9 +197,10 @@ function vertonRecognize(vertonInput) {
     if (vertonInput != "") {
         vertonOutput = null;
         let newInput = document.createElement("div");
-        newInput.setAttribute("class", "one-chat-bubble one-chat-bubble-user");
+        newInput.setAttribute("class", "one-chat-bubble one-chat-bubble-user hide");
         newInput.innerHTML = "<p class='one-chat-bubble'>" + vertonInput + "</p>";
         document.getElementById("one-chat").appendChild(newInput);
+        show(newInput);
 
         if(vertonInput.includes("hello")) {
             vertonOutput = "Hello!"
@@ -197,9 +209,17 @@ function vertonRecognize(vertonInput) {
     }
 }
 
-//Listener that detects if a user wants to deactivate Verton by clicking outside of the Verton input area
+//Listener that detects if a user wants to deactivate Verton by clicking outside of the Verton input area when Verton is enabled outside of the assistant page
 document.addEventListener("click", function(element) { 
     if (!event.target.closest("#display-verton-wrap") && packageActive != 1 && vertonActivate === true) {
+        deactivateVerton();
+    }
+});
+
+//Listener that detects key presses
+document.addEventListener('keydown', function(event) {
+    //If a user wants to deactivate Verton by clicking escape when Verton is enabled outside of the assistant page
+    if (event.key === "Escape" && packageActive != 1 && vertonActivate === true) {
         deactivateVerton();
     }
 });
