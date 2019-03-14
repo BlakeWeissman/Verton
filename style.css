@@ -8,6 +8,7 @@
     --theme-primary-color: #fff;
     --theme-secondary-color: #2d2d2d;
     --theme-interactive-color: #252525;
+    --shadow: 1px 0px 3px 0px rgba(0, 0, 0, 0.25);
 }
 
 body {
@@ -15,6 +16,7 @@ body {
     display: flex;
     background: var(--theme-background);
     transition: var(--animation-standard);
+    overflow: hidden;
 }
 
 * {
@@ -24,12 +26,49 @@ body {
 }
 
 p {
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 300;
+} 
+
+.hide-activate {
+    display: none !important;
 }
 
 .hide {
-    display: none;
+    animation: hide 0.15s !important;
+}
+
+.show {
+    animation: show 0.3s !important;
+}
+
+@keyframes show {
+    0%   {opacity: 0; display: none !important;}
+    50%  {opacity: 0; display: none !important;}
+    100% {opacity: 1;}
+}
+
+@keyframes hide {
+    0%   {opacity: 1;}
+    100% {opacity: 0; display: none !important}
+}
+
+@keyframes arc-rotate-out {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+}
+
+@keyframes arc-rotate-in {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+      transform: rotate(0deg);
+    }
 }
 
 /*scrollbar*/
@@ -47,7 +86,7 @@ div.packagebar {
     height: 100vh;
     width: 40px;
     background: var(--theme-packagebar-background);
-    box-shadow: 1px 0px 3px 0px rgba(0, 0, 0, 0.25); 
+    box-shadow: var(--shadow); 
     position: fixed;
     display: flex;
     transition: var(--animation-standard);
@@ -66,7 +105,7 @@ div.packagebar-icon-outline {
     margin-top: 5px;
     background: var(--theme-gradient);
     background-size: auto 100vh;
-    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow);
     transition: var(--animation-interactive);
     cursor: pointer;
 }
@@ -117,15 +156,20 @@ div.packagebar-icon-art {
 div.display {
     transition: var(--animation-standard);    
     overflow-y: scroll;
-    max-height: calc(100vh - 100px);
+    height: calc(100vh - 46px);
+    padding-right: 7px;
+}
+
+div.display-space {
+    width: 100%;
+    height: 100%;
+    padding: 7px 0px 0px 40px;
+    min-width: fit-content;
+    transition: var(--animation-standard);
 }
 
 div.display-wrap {
-    width: 100%;
-    height: 100%;
-    padding: 7px 0px 7px 50px;
-    min-width: fit-content;
-    transition: var(--animation-standard);
+    padding-left: 10px;
 }
 
 div.display-title {
@@ -139,30 +183,245 @@ div.display-end {
     width: 100%;
 }
 
-div.display-end-top {
-    background: linear-gradient(var(--theme-primary-color), transparent);
+div.display-verton-activate {
+    height: 34px;
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 40px);
+    background: transparent;    
+    display: flex;
 }
 
-div.display-end-bottom {
-    background: linear-gradient(transparent, var(--theme-primary-color));
-    bottom: 47px;
+div.display-verton-deactivate {
+    height: 72px;
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 40px);
+    background: transparent;    
+    display: flex;
 }
 
+div.display-verton-activate {
+    height: 44px;
+}
 
-/*package*/
-h1.package-title {
-    /*background: var(--theme-gradient); 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent;*/
+input.display-verton {
+    margin-top: auto;
+    height: 18px;
+    margin-bottom: auto;
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid var(--theme-secondary-color);
+    padding: 2px 7px;
+    font-size: 11.5px;
+    font-weight: 300;
+    background: var(--theme-primary-color);
+    color: var(--theme-secondary-color);
+    outline-width: 0;    
+    box-shadow: var(--shadow);
+}
+
+div.display-verton-button-outline {
+    display: flex;
+    width: 60px;
+    height: 60px;
+    margin-left: auto;
+    border-radius: 45px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    background: var(--theme-gradient);
+}
+
+div.display-verton-button-outline-spacing-left {
+    margin-left: 7px;
+}
+
+div.display-verton-button-outline-spacing-left-double {
+    margin-left: 14px;
+}
+
+div.display-verton-button-outline-spacing-right {
+    margin-right: 7px;
+}
+
+div.display-verton-button-outline-spacing-right-double {
+    margin-right: 7px;
+}
+
+div.display-verton-button {
+    background: var(--theme-interactive-color);
+    border-radius: 43px;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 54px;
+    height: 54px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+}
+
+div.display-verton-button-outline-activate {
+    height: 24px !important;
+    border-radius: 10px;
+    width: auto;
+}
+
+div.display-verton-button-activate {
+    height: 20px !important;
+    width: fit-content;
+    border-radius: 8px;
+    margin: 2px;
+    background: var(--theme-primary-color);
+}
+
+p.display-button {
+    margin: auto;
+    text-align: center;
+    font-weight: 500;
+    background: var(--theme-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-right: 6px;
+    margin-left: 6px;    
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+p.display-verton-button {
+    margin: auto;
+    text-align: center;
+    background: var(--theme-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-right: 6px;
+    margin-left: 6px;
+    white-space: nowrap;
+    font-weight: 900;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 21px;
+}
+
+h1.display-title {
     margin: 0;
     font-family: montserrat;
     font-weight: 300;
     color: var(--theme-secondary-color);
     transition: var(--animation-standard);
+    font-size: 26px
 }
 
-div.package {
-    padding-right: 7px;
+div.display-verton-activate-wrap {
+    display: flex;
+    height: fit-content;
+    margin-top: auto;
+    margin-left: 10px;
+    width: 100%;    
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+div.display-verton-deactivate-wrap {
+    margin-bottom: auto;
+    margin-right: 13px;
+    display: flex;
+    height: fit-content;
+    margin-top: auto;
+    margin-left: 10px;
+    width: 100%;    
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+div.display-verton-button-outline:hover div.display-verton-button {
+    background: var(--theme-gradient);
+}
+
+div.display-verton-button-outline:hover p.display-verton-button {
+    background: var(--theme-interactive-color);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+div.display-button-outline {
+    height: 24px;
+    border-radius: 10px;
+    width: auto;    
+    display: flex;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    background: var(--theme-gradient);
+}
+
+div.display-button {
+    height: 20px !important;
+    width: fit-content;
+    border-radius: 8px;
+    margin: 2px;
+    background: var(--theme-primary-color);
+    display: flex;
+}
+
+div.display-button-outline:hover div.display-button {
+    background: var(--theme-gradient);
+}
+
+div.display-button-outline:hover p.display-button {
+    background: var(--theme-primary-color);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+div.display-button-icon {
+    background: var(--theme-gradient);
+    background-size: auto 100vh;
+    transition: var(--animation-interactive);
+    width: 14px;
+    height: 14px;
+    margin: auto 6px;
+}
+
+div.display-button-outline:hover div.display-button-icon {
+    background: var(--theme-primary-color);
+}
+
+div.display-verton-button-outline:hover div.display-button-icon {
+    background: var(--theme-primary-color);
+}
+
+div.display-verton-button-arc {
+    position: absolute;
+    background: var(--theme-gradient);
+    background-size: auto 100vh;
+    transition: var(--animation-interactive);
+}
+
+div.display-verton-button-outline:hover div.display-verton-button-arc {
+    background: var(--theme-interactive-color);
+    background-size: auto 100vh;
+    transition: var(--animation-interactive);
+}
+
+div.display-verton-button-arc-out {
+    width: 44px;
+    height: 44px;
+    -webkit-mask-box-image: url(ArcOut.svg);
+    right: 18px;
+    bottom: 18px;
+    animation: 5s infinite linear arc-rotate-out;
+}
+
+div.display-verton-button-arc-in {
+    width: 30px;
+    height: 24px;
+    -webkit-mask-box-image: url(ArcIn.svg);
+    right: 25px;
+    bottom: 28px;
+    animation: 5s infinite linear arc-rotate-in;
+}
+
+div.display-verton-wrap {
+    height: 34px;
 }
 
 /*one*/
@@ -191,4 +450,20 @@ div.one-chat-bubble-verton {
     background: var(--theme-secondary-color);
     margin-right: auto;
     transition: var(--animation-standard);
+}
+
+div.one {
+    display: flex;
+    height: 100%;
+}
+
+div.one-wrap {
+    width: 100%;
+    margin-top: auto;
+    height: fit-content;
+}
+
+div.one-space {
+    width: 100%;
+    height: 44px;
 }
