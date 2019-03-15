@@ -28,6 +28,7 @@ body {
 p {
     font-size: 11px;
     font-weight: 300;
+    margin: 0;
 } 
 
 .hide-activate {
@@ -230,6 +231,19 @@ input.display-verton {
     box-shadow: var(--shadow);
 }
 
+input.display-search {    
+    width: -webkit-fill-available;
+    border-radius: 10px;
+    border: 1px solid var(--theme-secondary-color);
+    padding: 2px 7px;
+    font-size: 11.5px;
+    font-weight: 300;
+    background: var(--theme-primary-color);
+    color: var(--theme-secondary-color);
+    outline-width: 0;
+    box-shadow: var(--shadow);
+}
+
 div.display-verton-button-outline {
     display: flex;
     width: 60px;
@@ -255,6 +269,22 @@ div.display-verton-button-outline-spacing-right {
 
 div.display-verton-button-outline-spacing-right-double {
     margin-right: 7px;
+}
+
+div.display-verton-button-outline-spacing-top {
+    margin-top: 7px;
+}
+
+div.display-verton-button-outline-spacing-top-double {
+    margin-top: 14px;
+}
+
+div.display-verton-button-outline-spacing-bottom {
+    margin-bottom: 7px;
+}
+
+div.display-verton-button-outline-spacing-bottom-double {
+    margin-bottom: 7px;
 }
 
 div.display-verton-button {
@@ -355,7 +385,7 @@ div.display-verton-button-outline:hover p.display-verton-button {
 div.display-button-outline {
     height: 24px;
     border-radius: 10px;
-    width: auto;    
+    width: fit-content;    
     display: flex;
     cursor: pointer;
     box-shadow: var(--shadow);
@@ -433,6 +463,82 @@ div.display-verton-wrap {
     height: 34px;
 }
 
+p.display-primary {
+    color: var(--theme-primary-color);
+}
+
+p.display-secondary {
+    color: var(--theme-secondary-color);
+
+}
+
+label.display-switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 20px;
+    margin: 2px;
+}
+  
+.display-switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+  
+span.display-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--theme-primary-color);
+    -webkit-transition: .2s;
+    transition: .2s;
+    border-radius: 8px;
+    height: 20px;
+}
+  
+span.display-switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    -webkit-transition: .2s;
+    transition: .2s;
+    border-radius: 8px;
+    background: var(--theme-gradient);
+  }
+  
+input:checked + span.display-switch-slider {
+    background-color: var(--theme-gradient);
+}
+  
+/*input:focus + span.display-switch-slider  {
+    box-shadow: 0 0 1px #2196F3;
+}*/
+  
+input:checked + span.display-switch-slider:before {
+    -webkit-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    transform: translateX(22px);
+    background: var(--theme-primary-color);
+}
+
+div.display-switch-outline {
+    height: 24px;
+    border-radius: 10px;
+    width: fit-content;
+    display: flex;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    background: var(--theme-gradient);
+    margin-top: 3px;
+}
+
 /*one*/
 p.one-chat-bubble {
     width: fit-content;
@@ -475,4 +581,22 @@ div.one-wrap {
 div.one-space {
     width: 100%;
     height: 44px;
+}
+
+/*settings*/
+div.settings {
+    height: 100%;
+}
+
+div.settings-display {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll; 
+    padding-top: 28px;
+    display: flex;
+}
+
+div.settings-search-wrap {
+    position: fixed;
+    width: calc(100% - 63px);
 }
