@@ -33,6 +33,7 @@ function themeChange(themeName) {
         css.style.setProperty('--theme-primary-color', "#2d2d2d");
         css.style.setProperty('--theme-secondary-color', "#fff");   
         store.set("theme", "dark");
+        theme = "dark";
         document.getElementById("theme-checkbox").checked = true;
     }
     if (themeName === "light") {
@@ -41,6 +42,7 @@ function themeChange(themeName) {
         css.style.setProperty('--theme-primary-color', "#fff");
         css.style.setProperty('--theme-secondary-color', "#2d2d2d");   
         store.set("theme", "light");
+        theme = "light";
         document.getElementById("theme-checkbox").checked = false;
     }
 }
