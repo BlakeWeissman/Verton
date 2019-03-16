@@ -7,7 +7,7 @@
             <p class="display-secondary">Dark Theme</p>
             <div class="display-switch-outline">
                 <label class="display-switch">
-                    <input type="checkbox">
+                    <input type="checkbox" id="theme-checkbox" onclick="themeCheckbox();" check="{theme === 'dark'}">
                     <span class="display-switch-slider"></span>
                 </label>
             </div>
@@ -22,3 +22,4 @@
         </div>
     </div>
 </div>
+<script src="settingsLoad.js"></script>

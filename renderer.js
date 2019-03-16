@@ -28,28 +28,21 @@ const store = new storeClass({
 //Function that changes theme to light or dark
 function themeChange(themeName) {
     if (themeName === "dark") {
-    css.style.setProperty('--theme-packagebar-background', "linear-gradient(#4e4b49, #3d3d3d)");
-    css.style.setProperty('--theme-background', "#2d2d2d");
-    css.style.setProperty('--theme-primary-color', "#2d2d2d");
-    css.style.setProperty('--theme-secondary-color', "#fff");   
-    store.set("theme", "dark");
+        css.style.setProperty('--theme-packagebar-background', "linear-gradient(#4e4b49, #3d3d3d)");
+        css.style.setProperty('--theme-background', "#2d2d2d");
+        css.style.setProperty('--theme-primary-color', "#2d2d2d");
+        css.style.setProperty('--theme-secondary-color', "#fff");   
+        store.set("theme", "dark");
+        document.getElementById("theme-checkbox").checked = true;
     }
     if (themeName === "light") {
-    css.style.setProperty('--theme-packagebar-background', "linear-gradient(#e5e5e5, #cfcfcf)");
-    css.style.setProperty('--theme-background', "#fff");
-    css.style.setProperty('--theme-primary-color', "#fff");
-    css.style.setProperty('--theme-secondary-color', "#2d2d2d");   
-    store.set("theme", "light");
+        css.style.setProperty('--theme-packagebar-background', "linear-gradient(#e5e5e5, #cfcfcf)");
+        css.style.setProperty('--theme-background', "#fff");
+        css.style.setProperty('--theme-primary-color', "#fff");
+        css.style.setProperty('--theme-secondary-color', "#2d2d2d");   
+        store.set("theme", "light");
+        document.getElementById("theme-checkbox").checked = false;
     }
-}
-    
-//Retrieve and set theme based on user data
-let theme = store.get('theme');
-if (theme === "light") {
-    themeChange("light");
-}
-else if (theme === "dark") {
-    themeChange("dark");
 }
 
 //Receive requests from the main process to change the theme
@@ -122,11 +115,6 @@ function setTitle() {
         $("h1.display-title").html('Settings');
     } 
     document.getElementById("display-title-text").style.opacity = 1;
-}
-
-//Scroll display to the bottom and display appropriate fade effects outside the display on startup
-window.onload = function () {
-    display.scrollTop = display.scrollHeight;
 }
 
 //Function that activates the Verton UI's useable state
@@ -223,3 +211,29 @@ document.addEventListener('keydown', function(event) {
         deactivateVerton();
     }
 });
+
+
+//Retrieve and set theme based on user data
+let theme = store.get('theme');
+if (theme === "light") {
+    themeChange("light");
+}
+else if (theme === "dark") {
+    themeChange("dark");
+}
+
+//WINDOW ONLOAD
+window.onload = function() {
+    //Scroll display to the bottom
+    display.scrollTop = display.scrollHeight;
+}
+
+//SETTINGS
+function themeCheckbox() {
+    if (document.getElementById("theme-checkbox").checked == true){
+        themeChange("dark");
+    }
+    else {
+        themeChange("light");
+    }
+}
