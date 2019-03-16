@@ -3,8 +3,8 @@
         <input class="display-search">
     </div>
     <div class="settings-display">
-        <div>
-            <p class="display-secondary">Dark Theme</p>
+        <div class="settings-section">
+            <p class="display-secondary settings-section">Dark Theme</p>
             <div class="display-switch-outline">
                 <label class="display-switch">
                     <input type="checkbox" id="theme-checkbox" onclick="themeCheckbox();" check="{theme === 'dark'}">
@@ -12,14 +12,18 @@
                 </label>
             </div>
         </div>
-        <div style="margin-left: 7px;">           
-            <p class="display-secondary">Placeholder</p>
-            <div class="display-button-outline" style="margin-top: 3px;">
+        <div class="settings-section">           
+            <p class="display-secondary settings-section">Placeholder</p>
+            <div class="display-button-outline">
                 <div class="display-button">
                     <p class="display-button">Input</p>
                 </div>
             </div>
         </div>
+        <div class="settings-section">
+            <p class="display-secondary settings-section">Name</p>
+            <input class="settings" id="name-input">
+        </div>
     </div>
 </div>
-<script src="settingsLoad.js"></script>
+<script src="settings.js"></script>
