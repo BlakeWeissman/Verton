@@ -9,7 +9,6 @@ const fs = require('fs');
 
 let win;
 let menubarToBeEnabled = true;
-let theme;
 const userDataPath = (electron.app || electron.remote.app).getPath('userData') + "\\Verton.json";
 
 //SET FALSE FOR PUBLIC BUILDS
@@ -28,7 +27,7 @@ const store = new storeClass({
 function createWindow () {
   //If enabled, let user know DevMode is enabled
   if (devMode === true) {
-    console.log("Notice: DevMode is enabled. \n\nDevMode Keyboard Shortcuts: \nCTRL/CMD+D: Open DevTools \nCTRL/CMD+T: Change Theme\n");
+    console.log("Notice: DevMode is enabled. \n\nDevMode Keyboard Shortcuts: \nCTRL/CMD+D: Open DevTools");
   }
 
   //Create user data file if it does not exist
@@ -62,32 +61,11 @@ function createWindow () {
     store.set('windowDimensions', { width, height });
   });
 
-  //Get theme info
-  theme = store.get('theme');
-  if (devMode === true) {
-    console.log("Notice: The theme is '" + theme + "'.");
-  }
-
   //(DEV MODE) Open DevTools Using CTRL/CMD+D
   globalShortcut.register('CommandOrControl+D', () => {
     if (devMode === true) {
       win.webContents.openDevTools();
       console.log("Notice: DevTools has been opened.");
-    }
-  })
-  
-  //(DEV MODE) Change Theme Using CTRL/CMD+T
-  globalShortcut.register('CommandOrControl+T', () => {
-    if (devMode === true) {
-      if (theme === "light") {
-        win.webContents.send('send-theme', "dark");
-        theme = "dark";
-      }
-      else if (theme === "dark") {
-        win.webContents.send('send-theme', "light");
-        theme = "light";
-      }
-      console.log("Notice: The theme is now '" + theme + "'.");
     }
   })
 
@@ -104,6 +82,7 @@ function createWindow () {
       }
     }
   })*/
+  app.commandLine.appendSwitch('enable-speech-dispatcher');
 
   //When the window is closed
   win.on('closed', () => {
@@ -115,7 +94,7 @@ function createWindow () {
 }
 
 //Create the window
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
